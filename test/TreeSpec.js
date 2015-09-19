@@ -90,7 +90,6 @@ describe('Tree module', function () {
         });
         it('should return actual tree length', function () {
             expect(treeWithData.getTreeLength()).toBe(nodesArray.length);
-            a;
         });
     });
     function testBasicTree(tree, treeWithData) {

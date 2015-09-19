@@ -116,7 +116,7 @@ describe('Tree module', () => {
         });
 
         it('should return actual tree length', () => {
-            expect(treeWithData.getTreeLength()).toBe(nodesArray.length);a
+            expect(treeWithData.getTreeLength()).toBe(nodesArray.length);
         });
     });
 
