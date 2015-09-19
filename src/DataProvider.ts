@@ -1,14 +1,9 @@
+///<reference path="DataProvider.d.ts"/>
 /**
  * Created by alex on 9/19/15.
  */
 
 module DataProvider {
-
-    interface DataProviderInterface<T> {
-        data: T[];
-        getData(): T[];
-        setData(newData:T[]);
-    }
 
     export class DataProvider<T> implements DataProviderInterface<T> {
         data:T[];

@@ -1,3 +1,4 @@
+///<reference path="DataProvider.d.ts"/>
 /**
  * Created by alex on 9/19/15.
  */
