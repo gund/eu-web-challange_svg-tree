@@ -38,8 +38,8 @@ class MyNode extends Tree.Node {
     var myTree:Tree.TreeTraversal = new Tree.TreeTraversal(data.getData());
 
     // Init svg
-    draw.spof();
-    window.addEventListener('resize', () => draw.spof());
+    //draw.spof();
+    //window.addEventListener('resize', () => draw.spof());
 
     // Load static data to input
     _renderDataToInput();
@@ -64,9 +64,10 @@ class MyNode extends Tree.Node {
 
     function _updateData() {
         draw.clear();
-        var right = [];
-        for (let i = myTree.nodes.length - 1; i >= 0; --i) {
 
+        var right = [];
+
+        for (let i = 0; i < myTree.nodes.length; ++i) {
             if (right.length > 0)
                 while (right[right.length - 1] < myTree.nodes[i].right)
                     right.pop();
@@ -97,9 +98,6 @@ class MyNode extends Tree.Node {
         }
         errorBlock.innerHTML = e;
         errorBlock.classList.add('shown');
-        timerError = setTimeout(() => {
-            errorBlock.classList.remove('shown');
-        }, 3500);
     }
 
 })();

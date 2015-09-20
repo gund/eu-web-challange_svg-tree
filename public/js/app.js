@@ -184,8 +184,8 @@ var MyNode = (function (_super) {
     var data = new DataProvider.DataProvider(staticData);
     var myTree = new Tree.TreeTraversal(data.getData());
     // Init svg
-    draw.spof();
-    window.addEventListener('resize', function () { return draw.spof(); });
+    //draw.spof();
+    //window.addEventListener('resize', () => draw.spof());
     // Load static data to input
     _renderDataToInput();
     _updateData();
@@ -209,7 +209,7 @@ var MyNode = (function (_super) {
     function _updateData() {
         draw.clear();
         var right = [];
-        for (var i = myTree.nodes.length - 1; i >= 0; --i) {
+        for (var i = 0; i < myTree.nodes.length; ++i) {
             if (right.length > 0)
                 while (right[right.length - 1] < myTree.nodes[i].right)
                     right.pop();
@@ -234,9 +234,6 @@ var MyNode = (function (_super) {
         }
         errorBlock.innerHTML = e;
         errorBlock.classList.add('shown');
-        timerError = setTimeout(function () {
-            errorBlock.classList.remove('shown');
-        }, 3500);
     }
 })();
 //# sourceMappingURL=main.js.map
