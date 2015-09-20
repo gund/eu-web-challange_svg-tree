@@ -1,5 +1,5 @@
 ///<reference path="../../../../../Users/alex/Library/Preferences/WebStorm11/javascript/extLibs/http_github.com_borisyankov_DefinitelyTyped_raw_master_jasmine_jasmine.d.ts"/>
-///<reference path="../src/DataProvider.ts"/>
+///<reference path="../src/app/DataProvider.ts"/>
 
 /**
  * Created by alex on 9/19/15.

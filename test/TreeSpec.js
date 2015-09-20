@@ -1,5 +1,5 @@
 ///<reference path="../../../../../Users/alex/Library/Preferences/WebStorm11/javascript/extLibs/http_github.com_borisyankov_DefinitelyTyped_raw_master_jasmine_jasmine.d.ts"/>
-///<reference path="../src/Tree.ts"/>
+///<reference path="../src/app/Tree.ts"/>
 var TreeNode = Tree.Node;
 var BasicTree = Tree.BasicTree;
 var TreeTraversal = Tree.TreeTraversal;
