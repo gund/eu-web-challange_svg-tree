@@ -23,7 +23,7 @@ declare module Tree {
         getNextNode():NodeInterface;
         getPreviousNode():NodeInterface;
         getTreeLength():number;
-        getSubTree(node:NodeInterface):NodeInterface[];
+        getSubTree(node:NodeInterface, nonStrict?:boolean):NodeInterface[];
         getPathFromNode(node:NodeInterface):NodeInterface[];
     }
 

@@ -4,6 +4,7 @@
 import TreeNode = Tree.Node;
 import BasicTree = Tree.BasicTree;
 import TreeTraversal = Tree.TreeTraversal;
+import NodeInterface = Tree.NodeInterface;
 
 /**
  * Created by alex on 9/19/15.
@@ -101,13 +102,24 @@ describe('Tree module', () => {
             expect(treeWithData.getNextNode()).toBe(nodesArray[nodesArray.length - 1]);
         });
 
+        it('should return second if current not exist', () => {
+            treeWithData.currentNode = {left: 1, right: 2};
+            expect(treeWithData.getNextNode()).toBe(nodesArray[1]);
+        });
+
         it('should return node before and before before last', () => {
+            treeWithData.currentNode = nodesArray[nodesArray.length - 1];
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[nodesArray.length - 2]);
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[nodesArray.length - 3]);
         });
 
         it('should return first node even if current is first', () => {
             treeWithData.currentNode = nodesArray[0];
+            expect(treeWithData.getPreviousNode()).toBe(nodesArray[0]);
+        });
+
+        it('should return first node if current not exist', () => {
+            treeWithData.currentNode = {left: 1, right: 2};
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[0]);
         });
 
@@ -118,9 +130,47 @@ describe('Tree module', () => {
         it('should return actual tree length', () => {
             expect(treeWithData.getTreeLength()).toBe(nodesArray.length);
         });
+
+        it('should return subtree for second node (2,11)', () => {
+            expect(treeWithData.getSubTree(nodesArray[1])).toEqual(nodesArray.filter((node:NodeInterface) => {
+                return node.left > 2 && node.right < 11;
+            }));
+        });
+
+        it('should return subtree for second node (2,11) including it', () => {
+            expect(treeWithData.getSubTree(nodesArray[1], true)).toEqual(nodesArray.filter((node:NodeInterface) => {
+                return node.left >= 2 && node.right <= 11;
+            }));
+        });
+
+        it('should return empty subtree for last element', () => {
+            expect(treeWithData.getSubTree(nodesArray[nodesArray.length - 1])).toEqual([]);
+        });
+
+        it('should return last element from subtree for last element when non strict', () => {
+            expect(treeWithData.getSubTree(nodesArray[nodesArray.length - 1], true)).toEqual([nodesArray[nodesArray.length - 1]]);
+        });
+
+        it('should return empty subtree for non existing element', () => {
+            expect(treeWithData.getSubTree({left: 1, right: 2})).toEqual([]);
+        });
+
+        it('should return path to node (4,5)', () => {
+            expect(treeWithData.getPathFromNode(nodesArray[3])).toEqual(nodesArray.filter((node:NodeInterface) => {
+                return node.left < 4 && node.right > 5;
+            }));
+        });
+
+        it('should return empty path for first element', () => {
+            expect(treeWithData.getPathFromNode(nodesArray[0])).toEqual([]);
+        });
+
+        it('should return empty path for non existing element', () => {
+            expect(treeWithData.getPathFromNode({left: 1, right: 2})).toEqual([]);
+        });
     });
 
-    function testBasicTree(tree: BasicTree, treeWithData: BasicTree) {
+    function testBasicTree(tree:BasicTree, treeWithData:BasicTree) {
         it('should have nodes array and currentNode', () => {
             expect(tree.nodes).toEqual([]);
             expect(tree.currentNode).toBeDefined();

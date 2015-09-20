@@ -77,7 +77,12 @@ describe('Tree module', function () {
             treeWithData.currentNode = nodesArray[nodesArray.length - 1];
             expect(treeWithData.getNextNode()).toBe(nodesArray[nodesArray.length - 1]);
         });
+        it('should return second if current not exist', function () {
+            treeWithData.currentNode = { left: 1, right: 2 };
+            expect(treeWithData.getNextNode()).toBe(nodesArray[1]);
+        });
         it('should return node before and before before last', function () {
+            treeWithData.currentNode = nodesArray[nodesArray.length - 1];
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[nodesArray.length - 2]);
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[nodesArray.length - 3]);
         });
@@ -85,11 +90,45 @@ describe('Tree module', function () {
             treeWithData.currentNode = nodesArray[0];
             expect(treeWithData.getPreviousNode()).toBe(nodesArray[0]);
         });
+        it('should return first node if current not exist', function () {
+            treeWithData.currentNode = { left: 1, right: 2 };
+            expect(treeWithData.getPreviousNode()).toBe(nodesArray[0]);
+        });
         it('should return "0" length for empty tree', function () {
             expect(treeEmpty.getTreeLength()).toBe(0);
         });
         it('should return actual tree length', function () {
             expect(treeWithData.getTreeLength()).toBe(nodesArray.length);
+        });
+        it('should return subtree for second node (2,11)', function () {
+            expect(treeWithData.getSubTree(nodesArray[1])).toEqual(nodesArray.filter(function (node) {
+                return node.left > 2 && node.right < 11;
+            }));
+        });
+        it('should return subtree for second node (2,11) including it', function () {
+            expect(treeWithData.getSubTree(nodesArray[1], true)).toEqual(nodesArray.filter(function (node) {
+                return node.left >= 2 && node.right <= 11;
+            }));
+        });
+        it('should return empty subtree for last element', function () {
+            expect(treeWithData.getSubTree(nodesArray[nodesArray.length - 1])).toEqual([]);
+        });
+        it('should return last element from subtree for last element when non strict', function () {
+            expect(treeWithData.getSubTree(nodesArray[nodesArray.length - 1], true)).toEqual([nodesArray[nodesArray.length - 1]]);
+        });
+        it('should return empty subtree for non existing element', function () {
+            expect(treeWithData.getSubTree({ left: 1, right: 2 })).toEqual([]);
+        });
+        it('should return path to node (4,5)', function () {
+            expect(treeWithData.getPathFromNode(nodesArray[3])).toEqual(nodesArray.filter(function (node) {
+                return node.left < 4 && node.right > 5;
+            }));
+        });
+        it('should return empty path for first element', function () {
+            expect(treeWithData.getPathFromNode(nodesArray[0])).toEqual([]);
+        });
+        it('should return empty path for non existing element', function () {
+            expect(treeWithData.getPathFromNode({ left: 1, right: 2 })).toEqual([]);
         });
     });
     function testBasicTree(tree, treeWithData) {

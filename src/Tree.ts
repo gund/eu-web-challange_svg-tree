@@ -99,14 +99,14 @@ module Tree {
         }
 
         getNextNode():NodeInterface {
-            var nextNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right) + 1;
-            this.currentNode = this.nodes[Math.min(nextNodeNum, this.nodes.length - 1)];
+            var currentNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right);
+            this.currentNode = this.nodes[Math.min(currentNodeNum + 1, this.nodes.length - 1)];
             return this.currentNode;
         }
 
         getPreviousNode():NodeInterface {
-            var nextNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right) - 1;
-            this.currentNode = this.nodes[Math.max(nextNodeNum, 0)];
+            var currentNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right);
+            this.currentNode = this.nodes[Math.max(currentNodeNum - 1, 0)];
             return this.currentNode;
         }
 
@@ -114,12 +114,19 @@ module Tree {
             return this.nodes.length;
         }
 
-        getSubTree(node:NodeInterface):NodeInterface[] {
-            return undefined;
+        getSubTree(node:NodeInterface, nonStrict = false):NodeInterface[] {
+            if (!this._isInRange(node.left, node.right)) return [];
+            return this.nodes.filter((nodeLocal:NodeInterface) => {
+                if (nonStrict) return nodeLocal.left >= node.left && nodeLocal.right <= node.right;
+                else return nodeLocal.left > node.left && nodeLocal.right < node.right;
+            });
         }
 
         getPathFromNode(node:NodeInterface):NodeInterface[] {
-            return undefined;
+            if (!this._isInRange(node.left, node.right)) return [];
+            return this.nodes.filter((nodeLocal:NodeInterface) => {
+                return nodeLocal.left < node.left && nodeLocal.right > node.right;
+            });
         }
 
     }

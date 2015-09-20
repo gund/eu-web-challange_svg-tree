@@ -85,23 +85,35 @@ var Tree;
             return this.nodes[this.nodes.length - 1] || null;
         };
         TreeTraversal.prototype.getNextNode = function () {
-            var nextNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right) + 1;
-            this.currentNode = this.nodes[Math.min(nextNodeNum, this.nodes.length - 1)];
+            var currentNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right);
+            this.currentNode = this.nodes[Math.min(currentNodeNum + 1, this.nodes.length - 1)];
             return this.currentNode;
         };
         TreeTraversal.prototype.getPreviousNode = function () {
-            var nextNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right) - 1;
-            this.currentNode = this.nodes[Math.max(nextNodeNum, 0)];
+            var currentNodeNum = this._getNodeNumber(this.currentNode.left, this.currentNode.right);
+            this.currentNode = this.nodes[Math.max(currentNodeNum - 1, 0)];
             return this.currentNode;
         };
         TreeTraversal.prototype.getTreeLength = function () {
             return this.nodes.length;
         };
-        TreeTraversal.prototype.getSubTree = function (node) {
-            return undefined;
+        TreeTraversal.prototype.getSubTree = function (node, nonStrict) {
+            if (nonStrict === void 0) { nonStrict = false; }
+            if (!this._isInRange(node.left, node.right))
+                return [];
+            return this.nodes.filter(function (nodeLocal) {
+                if (nonStrict)
+                    return nodeLocal.left >= node.left && nodeLocal.right <= node.right;
+                else
+                    return nodeLocal.left > node.left && nodeLocal.right < node.right;
+            });
         };
         TreeTraversal.prototype.getPathFromNode = function (node) {
-            return undefined;
+            if (!this._isInRange(node.left, node.right))
+                return [];
+            return this.nodes.filter(function (nodeLocal) {
+                return nodeLocal.left < node.left && nodeLocal.right > node.right;
+            });
         };
         return TreeTraversal;
     })(BasicTree);
