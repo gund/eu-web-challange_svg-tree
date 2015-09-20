@@ -3,6 +3,7 @@
 ///<reference path="DataProvider.ts"/>
 ///<reference path="../../../../../../Users/alex/Library/Preferences/WebStorm11/javascript/extLibs/http_github.com_borisyankov_DefinitelyTyped_raw_master_jquery_jquery.d.ts"/>
 
+import Parent = svgjs.Parent;
 /**
  * Created by alex on 9/20/15.
  */
@@ -32,7 +33,7 @@ class MyNode extends Tree.Node {
         {name: "Lada", left: 13, right: 14},
         {name: "Polonez", left: 15, right: 16}
     ];
-    var topIndent = 30, leftIndent = 20;
+    var topIndent = 25, leftIndent = 20;
 
     // Prepare main objects for app
     var draw:svgjs.Doc = SVG('svg-drawing');
@@ -110,7 +111,7 @@ class MyNode extends Tree.Node {
 
                     // Check next node (if exists)
                     if (i < myTree.nodes.length - 1 &&
-                        (myTree.nodes[i+1].left < skipNode.left || myTree.nodes[i+1].right > skipNode.right))
+                        (myTree.nodes[i + 1].left < skipNode.left || myTree.nodes[i + 1].right > skipNode.right))
                         skippingSubNode = false;
 
                     continue;

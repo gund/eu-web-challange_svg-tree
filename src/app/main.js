@@ -37,7 +37,7 @@ var MyNode = (function (_super) {
         { name: "Lada", left: 13, right: 14 },
         { name: "Polonez", left: 15, right: 16 }
     ];
-    var topIndent = 30, leftIndent = 20;
+    var topIndent = 25, leftIndent = 20;
     // Prepare main objects for app
     var draw = SVG('svg-drawing');
     var input = document.querySelector('textarea.input-data');
