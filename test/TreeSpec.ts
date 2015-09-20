@@ -64,8 +64,18 @@ describe('Tree module', () => {
             expect(treeWithData.getNode(7, 10)).toBe(nodesArray[4]);
         });
 
-        it('should return null if no node found', () => {
+        it('should return "null" if no node found', () => {
             expect(treeWithData.getNode(16, 17)).toBe(null);
+        });
+
+        it('should return "null" if nodes empty', () => {
+            expect(treeEmpty.getNode(1, 2)).toBe(null);
+        });
+
+        it('should return first node if nodes array were set manually', () => {
+            var myTree:TreeTraversal = new TreeTraversal(nodesArray);
+            myTree.nodes = [nodesArray[0], nodesArray[1]];
+            expect(myTree.getNode(3, 6)).toBe(nodesArray[0]);
         });
 
         it('should return node children count', () => {
