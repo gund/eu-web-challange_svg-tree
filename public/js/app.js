@@ -145,6 +145,7 @@ var Tree;
 ///<reference path="../../../../../../Users/alex/Library/Preferences/WebStorm11/javascript/extLibs/http_github.com_borisyankov_DefinitelyTyped_raw_master_svgjs_svgjs.d.ts"/>
 ///<reference path="Tree.ts"/>
 ///<reference path="DataProvider.ts"/>
+///<reference path="../../../../../../Users/alex/Library/Preferences/WebStorm11/javascript/extLibs/http_github.com_borisyankov_DefinitelyTyped_raw_master_jquery_jquery.d.ts"/>
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -178,17 +179,32 @@ var MyNode = (function (_super) {
         { name: "Lada", left: 13, right: 14 },
         { name: "Polonez", left: 15, right: 16 }
     ];
+    var topIndent = 30, leftIndent = 20;
     var draw = SVG('svg-drawing');
     var input = document.querySelector('textarea.input-data');
     var errorBlock = document.querySelector('.error-block');
     var data = new DataProvider.DataProvider(staticData);
     var myTree = new Tree.TreeTraversal(data.getData());
+    var skippedNodes = [];
     // Init svg
-    //draw.spof();
-    //window.addEventListener('resize', () => draw.spof());
-    // Load static data to input
-    _renderDataToInput();
-    _updateData();
+    draw.viewbox({ x: 0, y: 0, width: 500, height: 500 });
+    draw.spof();
+    window.addEventListener('resize', function () { return draw.spof(); });
+    // Toggle nodes tree
+    $(draw.node).on('click', 'g', function (e) {
+        e.stopPropagation();
+        var group = $(e.currentTarget);
+        var child = group.find('g').slideToggle();
+        if (skippedNodes.indexOf(group.data('node')) === -1) {
+            if (child.length > 0)
+                skippedNodes.push(group.data('node'));
+        }
+        else {
+            var idx = skippedNodes.indexOf(group.data('node'));
+            skippedNodes.splice(idx, 1);
+        }
+        _updateData();
+    });
     // Watch changes on input
     var timer = 0;
     input.addEventListener('keyup', function () {
@@ -206,19 +222,46 @@ var MyNode = (function (_super) {
             }
         }, 500);
     }, false);
+    // Load static data to input
+    _renderDataToInput();
+    _updateData();
     function _updateData() {
         draw.clear();
-        var right = [];
+        var right = [], parentGroup = [draw.group().attr('data-node', 0)], topOffset = 0, currSkip = null;
         for (var i = 0; i < myTree.nodes.length; ++i) {
+            // Skip
+            if (!currSkip && skippedNodes.indexOf(i) !== -1) {
+                currSkip = { left: myTree.nodes[i].left, right: myTree.nodes[i].right };
+            }
+            else if (currSkip) {
+                if (myTree.nodes[i].right > currSkip.right)
+                    currSkip = null;
+                else {
+                    ++topOffset;
+                    continue;
+                }
+            }
+            // Manage indent and parents
             if (right.length > 0)
-                while (right[right.length - 1] < myTree.nodes[i].right)
+                while (right[right.length - 1] < myTree.nodes[i].right) {
                     right.pop();
-            _renderNode(myTree.nodes[i], right.length * 30, 30 * i);
+                    parentGroup.pop();
+                }
             right.push(myTree.nodes[i].right);
+            if (i > 0 && myTree.nodes[i - 1].left < myTree.nodes[i].left) {
+                parentGroup.push(draw.group());
+                parentGroup[parentGroup.length - 1].attr('data-node', i);
+                parentGroup[parentGroup.length - 2].add(parentGroup[parentGroup.length - 1]);
+            }
+            // Draw node
+            _renderNode(myTree.nodes[i], right.length * leftIndent, topIndent * (i - topOffset), parentGroup);
         }
     }
-    function _renderNode(node, x, y) {
+    function _renderNode(node, x, y, parent) {
+        if (parent === void 0) { parent = []; }
         var text = draw.text(node.name).dx(x).dy(y);
+        if (parent.length > 0)
+            parent[parent.length - 1].add(text);
     }
     function _renderDataToInput() {
         input.value = "[\n" + data.getData().map(function (node) {
