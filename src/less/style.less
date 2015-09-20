@@ -1,0 +1,88 @@
+//@import "../../public/lib/bootstrap/less/variables";
+//@import "../../public/lib/bootstrap/less/mixins/grid-framework";
+//@import "../../public/lib/bootstrap/less/mixins/grid";
+//@import "../../public/lib/bootstrap/less/grid";
+@import "../../public/lib/bootstrap/less/bootstrap";
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 15px;
+  background: #2c2c2c;
+  overflow: hidden;
+}
+
+.svg-side {
+  height: 100vh;
+  border-right: 1px solid #ffffff;
+
+  svg {
+    text {
+      fill: #fff;
+      cursor: pointer;
+    }
+  }
+}
+
+.input-side {
+  height: 100vh;
+
+  textarea {
+    display: block;
+    padding: 15px 20px;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background: #303030;
+    border: none;
+    outline: none;
+    resize: none;
+    -webkit-box-shadow: inset 0 0 15px 5px #2c2c2c;
+    -moz-box-shadow: inset 0 0 15px 5px #2c2c2c;
+    box-shadow: inset 0 0 15px 5px #2c2c2c;
+    -webkit-transition: background 0.15s ease-out;
+    -moz-transition: background 0.15s ease-out;
+    -ms-transition: background 0.15s ease-out;
+    -o-transition: background 0.15s ease-out;
+    transition: background 0.15s ease-out;
+
+    &:focus {
+      background: #3a3a3a;
+    }
+  }
+}
+
+.error-block {
+  position: fixed;
+  padding: 20px 25px;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background: rgba(177, 16, 0, 0.8);
+  border: 1px solid rgba(157, 16, 0, 0.8);
+  -webkit-border-radius: 0 8px 0 0;
+  -moz-border-radius: 0 8px 0 0;
+  border-radius: 0 8px 0 0;
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -o-transform: translateY(100%);
+  transform: translateY(100%);
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+
+  &.shown {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-transition: all 0.5s cubic-bezier(.08, .82, .17, 1);
+    -moz-transition: all 0.5s cubic-bezier(.08, .82, .17, 1);
+    -ms-transition: all 0.5s cubic-bezier(.08, .82, .17, 1);
+    -o-transition: all 0.5s cubic-bezier(.08, .82, .17, 1);
+    transition: all 0.5s cubic-bezier(.08, .82, .17, 1);
+  }
+}

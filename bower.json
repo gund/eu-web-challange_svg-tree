@@ -1,0 +1,16 @@
+{
+  "name": "eu-web-challange_svg-tree",
+  "version": "0.0.1",
+  "homepage": "https://github.com/gund/eu-web-challange_svg-tree",
+  "authors": [
+    "Alex Malkevich <malkevich.alex@gmail.com>"
+  ],
+  "main": "public/index.html",
+  "moduleType": [
+    "es6"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}
