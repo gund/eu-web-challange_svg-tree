@@ -164,10 +164,12 @@ var MyNode = (function (_super) {
 })(Tree.Node);
 (function () {
     "use strict";
+    // Check if SVG supported
     if (!SVG.supported) {
         alert('SVG not supported');
         return;
     }
+    // Default sample data
     var staticData = [
         { name: "Cars", left: 1, right: 18 },
         { name: "Fast", left: 2, right: 11 },
@@ -180,30 +182,33 @@ var MyNode = (function (_super) {
         { name: "Polonez", left: 15, right: 16 }
     ];
     var topIndent = 30, leftIndent = 20;
+    // Prepare main objects for app
     var draw = SVG('svg-drawing');
     var input = document.querySelector('textarea.input-data');
     var errorBlock = document.querySelector('.error-block');
     var data = new DataProvider.DataProvider(staticData);
     var myTree = new Tree.TreeTraversal(data.getData());
     var skippedNodes = [];
-    // Init svg
+    // Initialize svg
     draw.viewbox({ x: 0, y: 0, width: 500, height: 500 });
     draw.spof();
     window.addEventListener('resize', function () { return draw.spof(); });
-    // Toggle nodes tree
+    // Toggle nodes tree event handler
     $(draw.node).on('click', 'g', function (e) {
         e.stopPropagation();
         var group = $(e.currentTarget);
         var child = group.find('g').slideToggle();
         if (skippedNodes.indexOf(group.data('node')) === -1) {
+            // Try to add node to hidden state (if not last in subtree)
             if (child.length > 0)
                 skippedNodes.push(group.data('node'));
         }
         else {
+            // Remove node from hidden state
             var idx = skippedNodes.indexOf(group.data('node'));
             skippedNodes.splice(idx, 1);
         }
-        _updateData();
+        _updateData(); // Render data to SVG
     });
     // Watch changes on input
     var timer = 0;
@@ -211,33 +216,40 @@ var MyNode = (function (_super) {
         clearTimeout(timer);
         timer = setTimeout(function () {
             try {
+                // Parse input tree
                 var parsedNodes = JSON.parse(input.value);
-                data.setData(parsedNodes);
-                myTree.setNodes(data.getData());
-                _updateData();
-                _triggerError();
+                data.setData(parsedNodes); // Set to data provider
+                myTree.setNodes(data.getData()); // Copy to tree
+                _updateData(); // Render data to SVG
+                _triggerError(); // Update error block state (remove if no error)
             }
             catch (e) {
+                // Report about parsing error
                 _triggerError(e);
             }
         }, 500);
     }, false);
     // Load static data to input
     _renderDataToInput();
+    // Render data to SVG
     _updateData();
     function _updateData() {
         draw.clear();
-        var right = [], parentGroup = [draw.group().attr('data-node', 0)], topOffset = 0, currSkip = null;
+        var right = [], parentGroup = [draw.group().attr('data-node', 0)], topOffset = 0, skipNode = null, skippingSubNode = false;
+        // Loop by tree
         for (var i = 0; i < myTree.nodes.length; ++i) {
-            // Skip
-            if (!currSkip && skippedNodes.indexOf(i) !== -1) {
-                currSkip = { left: myTree.nodes[i].left, right: myTree.nodes[i].right };
+            // Draw node for skipped subtree
+            if (!skippingSubNode && skippedNodes.indexOf(i) !== -1) {
+                skippingSubNode = true;
+                skipNode = { left: myTree.nodes[i].left, right: myTree.nodes[i].right };
             }
-            else if (currSkip) {
-                if (myTree.nodes[i].right > currSkip.right)
-                    currSkip = null;
-                else {
+            else if (skippingSubNode) {
+                if (myTree.nodes[i].left > skipNode.left && myTree.nodes[i].right < skipNode.right) {
                     ++topOffset;
+                    // Check next node (if exists)
+                    if (i < myTree.nodes.length - 1 &&
+                        (myTree.nodes[i + 1].left < skipNode.left || myTree.nodes[i + 1].right > skipNode.right))
+                        skippingSubNode = false;
                     continue;
                 }
             }
@@ -259,11 +271,14 @@ var MyNode = (function (_super) {
     }
     function _renderNode(node, x, y, parent) {
         if (parent === void 0) { parent = []; }
+        // Create text node
         var text = draw.text(node.name).dx(x).dy(y);
+        // Append it to parent group
         if (parent.length > 0)
             parent[parent.length - 1].add(text);
     }
     function _renderDataToInput() {
+        // Output tree to input control
         input.value = "[\n" + data.getData().map(function (node) {
             return JSON.stringify(node);
         }).join(",\n") + "\n]";
@@ -271,10 +286,12 @@ var MyNode = (function (_super) {
     var timerError = 0;
     function _triggerError(e) {
         clearTimeout(timerError);
+        // If no error - hide error block
         if (!e) {
             errorBlock.classList.remove('shown');
             return;
         }
+        // Otherwise show
         errorBlock.innerHTML = e;
         errorBlock.classList.add('shown');
     }
